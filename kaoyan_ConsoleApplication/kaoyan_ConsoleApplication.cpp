@@ -3,6 +3,9 @@
 
 #include "stdafx.h"
 #include <iostream>
+#include "string.h"
+
+#define MAX_NUM 50
 
 void printData(int a[], int n, int i)
 {
@@ -150,13 +153,284 @@ void QuickSort(int k[], int n)
 	QSort(k, 0, n-1);
 }
 
+//获取100以内的质数，并相加
+void getNum(int n)
+{
+	int i, j,k;
+	for(i=2;i<n;i++)
+	{
+		//k = sqrt(i);
+		for(j=2;j<i;j++)
+		{
+			if(i%j==0)
+			{
+				//printf("%d\r\n:", i);
+				break;
+			}
+
+		}
+		if(j==i)
+		{
+			printf("%d\r\n:", i);
+		}
+
+	}
+
+}
+
+//返回真约数的和
+int GetYueShu(int num)
+{
+	int ret=0;
+	int i = 1;
+	for(i=1;i<num;i++)
+	{
+		if(num%i==0)
+		{
+			ret += i;
+		}
+
+	}
+	return ret;
+
+}
+
+typedef struct
+{
+	int HH;
+	int MM;
+	int SS;
+
+	int hh;
+	int mm;
+	int ss;
+	//char words[MAX_NUM];
+	//int result;
+}T_Data;
+//计算组合数
+int getZuHe(int r, int n)
+{
+	int i=1, a=1,b=1,c=1;
+	//n!
+	for( i=1;i<=n;i++)
+	{
+		a *= i;
+	}
+	//r!
+	for ( i = 1; i <= r; i++)
+	{
+		b *= i;
+	}
+	//(n-r)!
+	for (i = 1; i <= n-r; i++)
+	{
+		c *= i;
+	}
+	return a / (b*c);
+}
+
+//计算楼梯的走法
+int getStairsTimes(int M)
+{
+	int a, b, i, k;
+	
+	i = 0;
+	a = M / 2;
+	b = M % 2;
+	k = a;
+	if(b==0)
+	{
+		i = 1;
+		for(;a>0;a--,k+=1)
+		{
+			i += getZuHe(a,k);
+		}
+	}
+	if(b==1)
+	{
+		i = 0+ getZuHe(b, a+b);
+
+		for (; a>0; a--, k += 1)
+		{
+			i += getZuHe(a, k);
+		}
+	}
+	return i;
+}
+
+int array[40];//全局
+void oj_B_init(int n)
+{
+	
+	array[1] = 0;
+	array[2] = 1;
+	array[3] = 2;
+	for(int i=4;i<=n;i++)
+	{
+		array[i] = array[i - 1] + array[i - 2];
+	}
+}
+
+int oj_B_get(int m)
+{
+	return array[m];
+}
+
+int oj_C_GetType(char input)
+{
+	char *BigWord = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	char *SmallWord = "abcdefghijklmnopqrstuvwxyz";
+	char *Num = "0123456789";
+	char *Symbol = "`!@#$%^";
+	int i;
+	for(i=0;i<strlen(BigWord);i++)
+	{
+		if(input == BigWord[i])
+		{
+			return 1;
+		}
+
+		if (input == SmallWord[i])
+		{
+			return 2;
+		}
+	}
+
+	for (i = 0; i < strlen(Num); i++)
+	{
+		if (input == Num[i])
+		{
+			return 3;
+		}
+	}
+
+	for (i = 0; i<strlen(Symbol); i++)
+	{
+		if (input == Symbol[i])
+		{
+			return 4;
+		}
+	}
+
+	return 0;
+}
+
+//密码检测
+int oj_C(char *array)
+{
+	int type=0;
+	int class1 = 0;
+	int class2 = 0;
+	int class3 = 0;
+	int class4 = 0;
+	int ret=0;
+	int len = strlen(array);
+	if(len<8 || len >16)
+	{
+		return 0;
+	}
+	for(int i=0; i<len; i++)
+	{
+		type = oj_C_GetType(array[i]);
+		if(type == 0)//不包含所给的字符
+		{
+			return 0;
+		}
+		else if (type == 1)
+		{
+			class1 |=(1<<0);
+		}
+		else if (type == 2)
+		{
+			class2 |= (1 << 1);
+		}
+		else if (type == 3)
+		{
+			class3 |= (1 << 2);
+		}
+		else if (type == 4)
+		{
+			class4 |= (1 << 3);
+		}
+	}
+
+	ret = class1 + class2 + class3 + class4;
+	if ((ret == 1) || (ret == 2) || (ret == 4) || (ret == 8))//只包含1类字符的结果
+	{
+		return 0;
+	}	
+	else if((ret == 3)|| (ret == 5) || (ret == 9) || (ret == 6) || (ret == 10) || (ret == 12))//只包含两类字符的结果
+	{
+		return 0;
+	}
+	return 1;
+}
+
 int main()
 {
-	int a[5] = {5,2,3,4,2};
+	//int a[5] = {5,2,3,4,2};
 	//InsertSort(a,5);
 	//BubbleSort(a,5);
 	//SelectSort(a,5);
-	QuickSort(a,5);
-    return 0;
+	//QuickSort(a,5);
+	//getNum(100);
+	//int ret = getStairsTimes(3);
+	int a,b,n,i;
+	int ret;
+	int h, m, s;
+	//char *x;
+	//oj_B_init(40);
+	//while (1)
+	//{
+		scanf("%d\n", &n);
+		//n = 1;
+		//动态申请内存，创建结构体类型数组
+		T_Data *t_Data = (T_Data *)malloc(sizeof(T_Data)*n);
+		for (i = 0; i < n; i++)
+		{
+			scanf("%d:%d:%d %d:%d:%d", &t_Data[i].HH, &t_Data[i].MM, &t_Data[i].SS, &t_Data[i].hh, &t_Data[i].mm, &t_Data[i].ss);
+			//gets_s(t_Data[i].words,sizeof(t_Data[i].words));
+			//t_Data[i].numB = b;
+		}
+		for (i = 0; i < n; i++)
+		{
+			a = t_Data[i].HH * 60 * 60 + t_Data[i].MM * 60 + t_Data[i].SS;
+			b = t_Data[i].hh * 60 * 60 + t_Data[i].mm * 60 + t_Data[i].ss;
+			if (a > b)
+			{
+				ret = a - b;
+				m = ret / 60;
+				h = m / 60;//小时
+				m = m % 60;//分钟数
+				s = ret % 60;//秒
+			}
+			else if (a < b)
+			{
+				t_Data[i].hh = t_Data[i].hh % 12;
+				b = t_Data[i].hh * 60 * 60 + t_Data[i].mm * 60 + t_Data[i].ss;
+				if (a > b)
+				{
+					ret = a - b;
+					m = ret / 60;
+					h = m / 60;//小时
+					m = m % 60;//分钟数
+					s = ret % 60;//秒
+				}
+				else
+				{
+					a = (t_Data[i].HH + 12) * 60 * 60 + t_Data[i].MM * 60 + t_Data[i].SS;
+					ret = a - b;
+					m = ret / 60;
+					h = m / 60;//小时
+					m = m % 60;//分钟数
+					s = ret % 60;//秒
+				}
+			}
+			printf("%02d:%02d:%02d\n", h, m, s);
+		}
+	//}
+		free(t_Data);
+
+		return 0;
 }
 
