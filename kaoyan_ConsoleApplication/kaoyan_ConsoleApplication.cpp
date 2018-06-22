@@ -6,7 +6,7 @@
 #include "string.h"
 
 #define MAX_NUM 50
-
+#define N 5
 void printData(int a[], int n, int i)
 {
 	printf("the %d times:", i);
@@ -171,7 +171,7 @@ void getNum(int n)
 		}
 		if(j==i)
 		{
-			printf("%d\r\n:", i);
+			printf("%d ", i);
 		}
 
 	}
@@ -204,7 +204,11 @@ typedef struct
 	int hh;
 	int mm;
 	int ss;
-	//char words[MAX_NUM];
+	char wordsA[MAX_NUM];
+	char wordsB[MAX_NUM];
+
+	int A;
+	int B;
 	//int result;
 }T_Data;
 //计算组合数
@@ -366,8 +370,195 @@ int oj_C(char *array)
 	return 1;
 }
 
+//把字符串数字转成int型，要判断正负和去掉逗号
+int oj_G(char *s)
+{
+	int i,j;
+	int len;
+	int ret=0;
+	char *newS;
+	
+	len = strlen(s);
+
+	newS = (char *)malloc(len * sizeof(char));
+
+	if(len>12)//长度=1个负号+9个数字+2个逗号
+	{
+		return 0;
+	}
+		for (i = 0,j=0; i < len; i++)
+		{
+			if (s[i] != ',')
+			{
+				newS[j++] = s[i];
+			}
+			
+		}
+
+	if(newS[0]=='-')
+	{
+		for (i=j-1,j=1; i >= 1; i--)
+		{
+			
+			ret += (newS[i] - 0x30)*j;
+			j *= 10;
+		}
+		ret = 0 - ret;
+	}
+	else
+	{
+		for (i = j - 1, j = 1; i >= 0; i--)
+		{
+
+			ret += (newS[i]-0x30) * j;
+			j *= 10;
+		}
+	}
+
+	return ret;
+}
+
+//检测输入数值是否为素数
+int checkSuShu(int num)
+{
+	int i;
+	for(i=2;i<num;i++)
+	{
+		if(num%i==0)
+		{
+			//不是素数
+			return 0;
+		}
+
+	}
+	return num;
+}
+
+
+void problem30()
+{
+	int NN[N][N];
+	int i, j;
+	int sum1 = 0, sum2 = 0;
+	//给矩阵初始化
+	for (i = 0; i<N; i++)
+	{
+		for (j = 0; j<N; j++)
+		{
+			NN[i][j] = rand() % 100;
+			printf("%d ", NN[i][j]);
+		}
+		printf("\n");
+	}
+
+	//找素数
+	printf("\nsushu:");
+	for (i = 0; i<N; i++)
+	{
+		for (j = 0; j<N; j++)
+		{
+			//NN[i][j] = rand() % 100;
+			//printf("%d ", NN[i][j]);
+			if (checkSuShu(NN[i][j]) != 0)
+			{
+				printf("%d ", NN[i][j]);
+			}
+		}
+		//printf("\n");
+	}
+
+	//计算对角线元素之和（两条）
+	printf("\nduijiaoxian:");
+	for (i = 0; i<N; i++)
+	{
+		for (j = 0; j<N; j++)
+		{
+			//NN[i][j] = rand() % 100;
+			//printf("%d ", NN[i][j]);
+			if (i == j)
+			{
+				sum1 += NN[i][j];
+				printf("sum1:%d ", NN[i][j]);
+			}
+			if ((i + j) == (N - 1))
+			{
+				sum2 += NN[i][j];
+				printf("sum2:%d ", NN[i][j]);
+			}
+		}
+		//printf("\n");
+	}
+	printf("sum1:%d ", sum1);
+	printf("sum2:%d ", sum2);
+}
+
+//对输入参数保留3位小数，四舍五入
+float fun(double h)
+{
+	int n, j;
+	int ret;
+	float result;
+	n = h * 10000;
+	j = n % 10;
+	if(j<5)
+	{
+		ret = h * 1000;
+	}
+	else
+	{
+		ret = h * 1000 + 1;
+	}
+	result = float(ret)/1000;
+	return result;
+}
+
+void f(int a[], int i, int j)
+{
+	int t;
+	if(i<j)
+	{
+		t = a[i];
+		a[i] = a[j];
+		a[j] = t;
+		f(a, i+1, j-1);
+	}
+}
+
+int a[5][5]={11,3,5,6,9,12,4,7,8,10,10,5,6,9,11,8,6,4,7,2,15,10,11,20,25};
+//检查是否是数组的列上最小值
+int getMin(int j)
+{
+	int i=0;
+	int min=0;//鞍点值
+
+	min = a[i][0];
+	for(i=0;i<5;i++)
+	{
+		if (min > a[i][j])
+		{
+			min = a[i][j];
+		}
+	}
+	return min;
+}
+
+int f(int *p)
+{
+	int b = 0;
+	static int c = 3;
+	b++;
+	*p = (*p) + b + (c++);
+	return (*p);
+
+}
+
 int main()
 {
+	char *a[3] = {"I","Love","China"};
+	char **ptr = a;
+	printf("%c %s",*(*(a+1)+1), *(ptr+1));
+	return 0;
+
 	//int a[5] = {5,2,3,4,2};
 	//InsertSort(a,5);
 	//BubbleSort(a,5);
@@ -375,62 +566,36 @@ int main()
 	//QuickSort(a,5);
 	//getNum(100);
 	//int ret = getStairsTimes(3);
-	int a,b,n,i;
-	int ret;
-	int h, m, s;
+	//int a,b,n=1,i=0;
+	//int ret;
+	//int h, m, s;
 	//char *x;
 	//oj_B_init(40);
 	//while (1)
 	//{
-		scanf("%d\n", &n);
+	//printf("%d\n", sizeof(int));
+		//scanf("%d\n", &n);
 		//n = 1;
 		//动态申请内存，创建结构体类型数组
-		T_Data *t_Data = (T_Data *)malloc(sizeof(T_Data)*n);
-		for (i = 0; i < n; i++)
+	
+	/*T_Data *t_Data = (T_Data *)malloc(sizeof(T_Data)*n);
+		while (scanf("%s %s", t_Data[i].wordsA, t_Data[i].wordsB) != EOF)
 		{
-			scanf("%d:%d:%d %d:%d:%d", &t_Data[i].HH, &t_Data[i].MM, &t_Data[i].SS, &t_Data[i].hh, &t_Data[i].mm, &t_Data[i].ss);
+			//for(i=0;i<n;i++)
+			//{
+			//	scanf("%s %s", t_Data[i].wordsA, t_Data[i].wordsB);
+			//scanf("%d:%d:%d %d:%d:%d", &t_Data[i].HH, &t_Data[i].MM, &t_Data[i].SS, &t_Data[i].hh, &t_Data[i].mm, &t_Data[i].ss);
 			//gets_s(t_Data[i].words,sizeof(t_Data[i].words));
 			//t_Data[i].numB = b;
-		}
-		for (i = 0; i < n; i++)
-		{
-			a = t_Data[i].HH * 60 * 60 + t_Data[i].MM * 60 + t_Data[i].SS;
-			b = t_Data[i].hh * 60 * 60 + t_Data[i].mm * 60 + t_Data[i].ss;
-			if (a > b)
-			{
-				ret = a - b;
-				m = ret / 60;
-				h = m / 60;//小时
-				m = m % 60;//分钟数
-				s = ret % 60;//秒
-			}
-			else if (a < b)
-			{
-				t_Data[i].hh = t_Data[i].hh % 12;
-				b = t_Data[i].hh * 60 * 60 + t_Data[i].mm * 60 + t_Data[i].ss;
-				if (a > b)
-				{
-					ret = a - b;
-					m = ret / 60;
-					h = m / 60;//小时
-					m = m % 60;//分钟数
-					s = ret % 60;//秒
-				}
-				else
-				{
-					a = (t_Data[i].HH + 12) * 60 * 60 + t_Data[i].MM * 60 + t_Data[i].SS;
-					ret = a - b;
-					m = ret / 60;
-					h = m / 60;//小时
-					m = m % 60;//分钟数
-					s = ret % 60;//秒
-				}
-			}
-			printf("%02d:%02d:%02d\n", h, m, s);
-		}
-	//}
-		free(t_Data);
+			//}
+			//for (i = 0; i<n; i++)
+			//{
 
-		return 0;
+			t_Data[i].A = oj_G(t_Data[i].wordsA);
+			t_Data[i].B = oj_G(t_Data[i].wordsB);
+			printf("%d\n", t_Data[i].A + t_Data[i].B);
+			//}
+		}
+		free(t_Data);*/
 }
 
