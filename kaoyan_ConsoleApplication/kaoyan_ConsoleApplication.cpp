@@ -39,24 +39,7 @@ void InsertSort(int k[], int n)
 	}
 	
 }
-//冒泡排序
-void BubbleSort(int k[], int n)
-{
-	int i, j, temp;
-	for (i = 0; i < n-1; i++)
-	{
-		for (j = i; j < n; j++)
-		{
-			if (k[i]>k[j])
-			{
-				temp = k[i];
-				k[i] = k[j];
-				k[j] = temp;
-			}
-		}
-		printData(k, n, i);
-	}
-}
+
 
 //选择排序，通过n-i次关键字间的比较，从n-i+1个记录
 //中选出关键字最小的记录，并和第i（1<=i<=n）个记录交换。
@@ -552,12 +535,362 @@ int f(int *p)
 
 }
 
+//冒泡排序，第五道编程题
+void BubbleSort_1(int k[], int n)
+{
+	int i, j, temp;
+	for (i = 0; i < n - 1; i++)
+	{
+		for (j = i; j < n; j++)
+		{
+			//调整成升序
+			if ((k[i]%1000)>(k[j]%1000))
+			{
+				temp = k[i];
+				k[i] = k[j];
+				k[j] = temp;
+			}
+			else if((k[i] % 1000) == (k[j] % 1000))
+			{
+				if (k[i] < k[j])
+				{
+					temp = k[i];
+					k[i] = k[j];
+					k[j] = temp;
+				}
+			}
+		}
+		printData(k, n, i);
+	}
+}
+
+typedef struct person
+{
+	int code;
+	struct person *next;//引用自身的结构体
+};
+
+#define PEOPLE_NUM 41
+#define JUMP_NUM 3
+
+//出圈问题
+void outList()
+{
+	int i;
+	int count = 1;//作为报数的游标
+	int outNum = 0;//统计出队人数，判断循环结束的条件
+	person list[PEOPLE_NUM];
+	person *start_person = list;
+	//初始化结构体
+	for (i = 0; i<PEOPLE_NUM; i++)
+	{
+		list[i].code = i + 1;//人员编号
+		list[i].next = &list[i + 1];
+		if (list[i].code == PEOPLE_NUM)
+		{
+			list[i].next = &list[0];
+		}
+	}
+
+	while (outNum<PEOPLE_NUM)
+	{
+		if ((count + 1) % JUMP_NUM == 0)
+		{
+			count = 0;
+			outNum++;
+			printf("%d\n", start_person->next->code);
+			//迁移节点
+			start_person->next = start_person->next->next;
+		}
+		start_person = start_person->next;
+		count++;
+	}
+}
+
+//进制转换
+void fun(int m, int k)
+{
+	if(m%k == 0)
+	{
+		fun(m / k, k);
+		printf("%d", m%k);
+	}
+	else printf("%d", m%k);//此处需要把最后的余数1打印出来，并由里而外退出递归
+}
+
+//冒泡排序(升序)
+void BubbleSort_shengxu(int *k, int n)
+{
+	int i, j, temp, flag;
+	for (i = 0; i < n; i++)
+	{
+		for (j = i+1; j < n; j++)
+		{
+			//调整成升序
+			if (k[i]>k[j])
+			{
+				temp = k[i];
+				k[i] = k[j];
+				k[j] = temp;
+
+				flag = 1;
+			}
+
+		}
+		printData(k, n, i);
+	}
+}
+
+int fun_getLen(char *s)
+{
+	int len=0;
+	while(*(s++)!='\0')
+	{
+		len++;
+		}
+	return len;
+}
+
+float s[30], w[6];
+void fun1(float s[])
+{
+	int k, i;
+	for(k=2,i=0;i<30;i++)
+	{
+		s[i] = k;
+		k+=2;
+	}
+}
+
+void fun2(float s[], float w[])
+{
+	float sum = 0;
+	int k, i;
+	for(k=0,i=0;i<30;i++)
+	{
+		sum += s[i];
+		if((i+1)%5!=0) 
+			continue;
+		{
+			w[k] = sum / 5;
+			sum = 0;
+			k++;
+		}
+	}
+}
+
+void fun(char *s1,char *s2)
+{
+	//float a = 2.2;
+	char *p1 = s1, *p2;
+	while(*s1)
+	{
+		p2 = s2;
+		while(*p2&&(*s2 != *s1))//edit
+			p2++;
+					
+		if (*p2 == '\0') *p1++ = *s1;
+
+		s1++;
+	}
+	*(--p1) = '\0';//edit
+
+	//return a;
+}
+
+void PrintCharNtimes(char c, int n)
+{
+	int i;
+	for(i=0;i<n;i++)
+	{
+		printf("%c", c);
+		
+	}
+	
+}
+
+//二分法查找元素
+int fun1(int a[], int n, int key)
+{
+	int low, high, mid;
+	low = 0; high = n - 1;
+	while(low<=high)
+	{
+		mid = (low + high) / 2;
+		if (key < a[mid])
+			high=mid-1;
+		else if (key > a[mid])
+			low=mid+1;
+		else
+			return mid;
+	}
+	return -1;
+}
+//输出等边三角形
+void fun2(char a, int h)
+{
+	if(h>0)
+	{
+		printf("%c", a);
+		fun2(a, h-1);
+	}
+}
+
+//查找子串s2在字符串s1中出现的次数
+int findstring(char *s, char *t)
+{
+	int num = 0;
+	char *p, *q;
+	for(;*s!='\0';s++)
+	{
+		if(*s!=*t)
+			continue;
+		else
+		{
+			for(p=s,q=t;*q!='\0';p++,q++)
+			{
+				if(*p!=*q)
+					break;
+			}
+			if (*q == '\0')
+				num++;
+		}
+	}
+	return num;
+}
+
+void strcopy(char *str1, char *str2, int m)
+{
+	char *p1, *p2;
+	p1 = str1 + m;
+	p2 = str2;
+	while(*p1)
+	{
+		*p2++ = *p1++;
+	}
+	*p2 = '\0';
+}
+
+
 int main()
 {
-	char *a[3] = {"I","Love","China"};
-	char **ptr = a;
-	printf("%c %s",*(*(a+1)+1), *(ptr+1));
-	return 0;
+	
+}
+/*输出等边三角形
+int i, h;
+	//scanf("%d",&h);
+	h = 3;
+	for(i=1;i<=h;i++)
+	{
+		fun2(' ', h-i);
+		fun2('*', 2 * i - 1);
+		printf("\n");
+	}
+	*/
+
+
+/*完数，一个数如果恰好等于它的因子之和，不含本身
+ * int maxNum = 5000;
+	int i = 0, j = 0, sum = 0;
+	for (i = 2; i <= maxNum; i++)
+	{
+		sum = 0;
+		for (j = 1; j<i; j++)
+		{
+			if (i%j == 0)
+			{
+				sum += j;
+			}
+		}
+		if (i == sum)
+		{
+			printf("%d  ", i);
+			printf("its factors are ");
+			for (j = 1; j<i; j++)
+			{
+				if (i%j == 0)
+				{
+					printf("%d,", j);
+				}
+			}
+			printf("\n");
+		}
+	}
+ */
+	/*//卷积编码器
+	//实际输入的input为 0,1,1,1,0,1,1,1,1,前面要加两个0
+	int input[11] = {0,0,0,1,1,1,0,1,1,1,1};
+	int output[9][3] = {0};
+
+	for(int i=2;i<11;i++)
+	{
+		output[i - 2][0] = input[i];
+		output[i - 2][1] = input[i] ^ input[i - 2];
+		output[i - 2][2] = input[i] ^ input[i - 1] ^ input[i - 2];
+	}
+
+	for(int i=0;i<9;i++)
+	{
+		printf("%d: ", input[i+2]);
+		for(int j=0;j<3;j++)
+		{
+			printf("%d ", output[i][j]);
+		}
+		printf("\n");
+	}*/
+
+
+	/*int ret = 1;
+	int num = 123456;
+	while(num!=0)
+	{
+		ret *= num % 10;
+		num /= 10;
+	}
+	printf("%d", ret);*/
+
+	/*int Fa = 1, Fb = 1, Fc = 0, i = 2;
+	printf("%d %d ", Fa,Fb);
+	while(i<20)
+	{
+		Fc = Fa + Fb;
+		printf("%d ", Fc);
+		i++;
+		if(i%5==0)
+		{
+			printf("\n");
+
+		}
+		Fa = Fb;
+		Fb = Fc;
+	}*/
+
+
+	/*char *a="a233acdf4df2c#";
+	//scanf("%s", a);
+	int flag=1;//分组别
+	while(*a!='#')
+	{
+		if(*a>='0'&&*a<='9')
+		{
+			if(flag==0)
+			{
+				printf(" ");
+			}
+			flag = 1;
+			PrintCharNtimes(*(a + 1), *a - 0x30+1);//n+1次
+			printf(" ");
+			a++;
+		}
+		else
+		{
+			flag = 0;
+			printf("%c", *a);
+		}
+		a++;
+	}*/
+
+
 
 	//int a[5] = {5,2,3,4,2};
 	//InsertSort(a,5);
@@ -597,5 +930,5 @@ int main()
 			//}
 		}
 		free(t_Data);*/
-}
+
 
