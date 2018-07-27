@@ -771,11 +771,168 @@ void strcopy(char *str1, char *str2, int m)
 	*p2 = '\0';
 }
 
+//字符串复制
+void MyStrcpy(char *s, char *t)
+{
+	while((*t=*s)!='\0')//先赋值再判断，最后的\0会被复制过去
+	{
+		t++;
+		s++;
+	}
+}
+
+//10个人的成绩排序，由高到低，并打印成绩不及格的学生人数
+void sort(char score[], int n)
+{
+	int i, j;
+	int startIndex = 1;
+	int stopIndex = n-1;
+	float temp;
+	for(i= startIndex;i<stopIndex -1;i++)
+	{
+		for(j=i+1;j<stopIndex;j++)//注意冒泡法的此处，j=i,i只和它后面的数比较
+		{
+			if(score[i]>score[j])
+			{
+				temp = score[i];
+				score[i] = score[j];
+				score[j] = temp;
+			}
+		}
+	}
+	for(i=0;i<n;i++)
+	{
+		printf("%c ", score[i]);
+	}
+}
+
+int fail(float score[], int n)
+{
+	int i,count=0;
+	for(i=0;i<n;i++)
+	{
+		if (score[i] < 60)
+			count++;
+	}
+	return count;
+}
+
+//根据组合格式计算
+int getZuHe(int n, int x,int v)
+{
+	int i, ret=0;
+	int a=1, b=1, c=1;
+	for(i=1;i<=n;i++)
+	{
+		a *= i;
+	}
+	for(i=1;i<=n-x;i++)
+	{
+		b *= i;
+	}
+	for (i = 1; i <= x; i++)
+	{
+		c *= i;
+	}
+	ret = a / (b*c);
+	return ret;
+}
+
+typedef struct t_Count
+{
+	char index;
+	int num;
+};
+
+void fun(char *s, int *len)
+{
+	while (*s!='\0')
+	{
+		*len++;
+		s++;
+	}
+}
 
 int main()
 {
-	
+
 }
+
+/*统计字符出现次数，找最多的，若有并列，则取ascii值小的
+	int n = 26;
+	int i, j;
+	char s[200],*p,temp;
+	//改用结构体类型数组
+	//int count[26][2] = { 0 };//第一列存字符A-Z,第二列存出现次数
+	t_Count count[26];
+	//初始化
+	for(i=0;i<n;i++)
+	{
+		count[i].index = + i;
+		count[i].num = 0;
+	}
+	scanf("%s", s);
+	p = s;
+	
+	//统计频度
+	while(*p!='\0')
+	{
+		temp = *p;
+		if(temp >='A'&& temp <='Z')
+		{
+			count[temp-'A'].num++;
+		}
+		p++;
+	}
+
+	//排序
+	
+	t_Count a;
+	for(i=0;i<n -1;i++)
+	{
+		for(j=1;j<n;j++)
+		{
+			//交换结构体信息
+			if(count[i].num<count[j].num)
+			{
+				a = count[j];
+				count[j] = count[i];
+				count[i] = a;
+			}
+			//如果次数相同，把ascii值小的放前面
+			if((count[i].num==count[j].num) && (count[i].index > count[j].index))
+			{
+				a = count[j];
+				count[j] = count[i];
+				count[i] = a;
+			}
+		}
+	}
+
+	printf("%c %d", count[0].index + 'A', count[0].num);
+}*/
+
+	/*利用pi/2=2/1 *2/3 *4/3 *4/5 *6/5 *6/7*...的前100项之积,编程计算p的值
+	 *int i = 0;
+	float  m = 1, n = 2;
+	float ret = 1;
+	for(i=0;i<100;i++)
+	{
+		if (i % 2 == 0)
+		{
+			ret *= n / m;
+			//printf("ret*=:%f/%f\n", n,m);
+			n++, m++;
+		}
+		else
+		{
+			ret *= m / n;
+			//printf("ret*=:%f/%f\n", m, n);
+			n++, m++;
+		}
+	}
+	printf("pi is:%f",ret*2);
+}*/
 /*输出等边三角形
 int i, h;
 	//scanf("%d",&h);
@@ -817,7 +974,7 @@ int i, h;
 		}
 	}
  */
-	/*//卷积编码器
+	/*//卷积编码器!!!重点题
 	//实际输入的input为 0,1,1,1,0,1,1,1,1,前面要加两个0
 	int input[11] = {0,0,0,1,1,1,0,1,1,1,1};
 	int output[9][3] = {0};
