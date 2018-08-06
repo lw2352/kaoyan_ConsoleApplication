@@ -853,9 +853,100 @@ void fun(char *s, int *len)
 	}
 }
 
+//2017（845）的第16题，计算组合数，用的递归公式，注意需要return的地方!!!
+int combin(int m,int n)
+{
+	int com;
+	if (n < 2 * m) return(combin(n - m, n));//第一次写的时候掉了，导致会继续跑下面的句子，实际上应该返回
+
+	if (m == 0) com = 1;
+	else if (m == 1) return n;
+	else return( combin(m, n - 1) + combin(m - 1, n - 1));
+
+	return com;
+}
+
+//2017（845）的第17题,按降序完成从大到小的排序
+int Array[10] = { 1,3,5,7,9,2,4,6,8,0 };
+
+void swap(int *x,int *y)
+{
+	int temp;
+	temp = *x;
+	*x = *y;
+	*y=temp;
+}
+
+void sort(int *p, int *q)
+{
+	int *max, *s;
+	if (p == &Array[9])
+		return;
+	max = p;
+	for (s = p + 1; s <= q; s++)
+		if (*s > *max)
+		{
+			max=s;
+		}
+
+	swap(p, max);
+	sort(++p,s);
+}
+
+//char str[80] = "asasasa", substr[80]="asa";
+//统计子串substr在字符串str中出现的次数
+int fun3(char *substr, char *str)
+{
+	int i, j, k, num = 0;
+	for (i = 0; str[i]; i++)
+	{
+		for (j = i, k = 0; substr[k] == str[j]; k++, j++)
+		{
+			if (substr[k+1] == '\0')
+			{
+				num++;
+				break;
+			}
+		}
+	}
+
+	return num;
+}
+
+int f(int a)
+{
+	int b = 0;
+	static int c = 3;
+	b++; c++;
+	return (a+b+c);
+}
 int main()
 {
+	int num, a[10], r;
+	int i = 0, j, flag = 1;
+	scanf("%d", &num);
+	if (num <= 0) return -1;
 
+	do
+	{
+		r = num % 10;
+		a[i] = r;
+		num = num / 10;
+		i++;
+	} while (num % 10 != 0);
+
+	for(j=0,i--;i>=j;i--,j++)
+		if(a[j]!=a[i])
+		{
+			flag = 0; 
+			break;
+		}
+
+	if (flag == 1)
+		printf("YES");
+	else printf("NO");
+	
+	
 }
 
 /*统计字符出现次数，找最多的，若有并列，则取ascii值小的
